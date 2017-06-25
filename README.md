@@ -1,4 +1,4 @@
-# ts-immutable-struct
+# ts-react-struct
 
 [![npm version](https://badge.fury.io/js/ts-react-struct.svg)](https://badge.fury.io/js/ts-react-struct)
 [![NPM downloads](https://img.shields.io/npm/dm/ts-react-struct.svg?style=flat)](https://npmjs.org/package/ts-react-struct)
