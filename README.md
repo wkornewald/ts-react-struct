@@ -22,7 +22,7 @@ import * as React from 'react'
 import {ChangeEvent} from 'react'
 import * as ReactDom from 'react-dom'
 import {Struct, LeafRef, ChangeReason} from 'ts-immutable-struct'
-import {Component} from '..'
+import {Component} from 'ts-immutable-struct'
 
 interface Props extends React.HTMLProps<HTMLInputElement> {
   valueRef: LeafRef<string>,
