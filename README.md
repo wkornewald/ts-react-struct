@@ -29,14 +29,14 @@ interface Props extends React.HTMLProps<HTMLInputElement> {
 }
 
 class Input extends Component<Props> {
-  onChange(event: ChangeEvent<HTMLInputElement>) {
+  onChange = (event: ChangeEvent<HTMLInputElement>) => {
     this.props.valueRef.val(event.target.value, new ChangeReason(event.nativeEvent))
   }
 
   render() {
     let props: Props = Object.assign({}, this.props)
     delete props.valueRef
-    return <input {...props} value={this.props.valueRef.deref()} onChange={this.bindMethod('onChange')} />
+    return <input {...props} value={this.props.valueRef.deref()} onChange={this.onChange} />
   }
 }
 
