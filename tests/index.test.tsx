@@ -2,7 +2,7 @@ import {mount} from 'enzyme'
 import * as React from 'react'
 import {ChangeEvent} from 'react'
 import * as ReactDom from 'react-dom'
-import {Struct, LeafRef, ChangeReason} from 'ts-immutable-struct'
+import {Struct, LeafRef} from 'ts-immutable-struct'
 import {Component} from '..'
 
 interface Props extends React.HTMLProps<HTMLInputElement> {
@@ -11,7 +11,7 @@ interface Props extends React.HTMLProps<HTMLInputElement> {
 
 class Input extends Component<Props> {
   onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    this.props.valueRef.val(event.target.value, new ChangeReason(event.nativeEvent))
+    this.props.valueRef.val(event.target.value, event)
   }
 
   render() {
@@ -31,8 +31,8 @@ test('Component rendering', () => {
   )
 
   let wasUser = false
-  data.observe((oldVal, newVal, event) => {
-    wasUser = event.wasUser
+  data.observe((event, oldVal, newVal) => {
+    wasUser = event !== undefined
     component.update()
   })
 
@@ -47,7 +47,7 @@ test('Component rendering', () => {
   expect(component.html()).toEqual('<input title="Title" value="hey">')
 
   // Simulate programmatic value change
-  data.get('value').val('hola', new ChangeReason())
+  data.get('value').val('hola')
   expect(wasUser).toEqual(false)
   expect(component.html()).toEqual('<input title="Title" value="hola">')
 })

@@ -21,7 +21,7 @@ Example usage:
 import * as React from 'react'
 import {ChangeEvent} from 'react'
 import * as ReactDom from 'react-dom'
-import {Struct, LeafRef, ChangeReason} from 'ts-immutable-struct'
+import {Struct, LeafRef} from 'ts-immutable-struct'
 import {Component} from 'ts-react-struct'
 
 interface Props extends React.HTMLProps<HTMLInputElement> {
@@ -30,7 +30,7 @@ interface Props extends React.HTMLProps<HTMLInputElement> {
 
 class Input extends Component<Props> {
   onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    this.props.valueRef.val(event.target.value, new ChangeReason(event.nativeEvent))
+    this.props.valueRef.val(event.target.value,event)
   }
 
   render() {
@@ -49,7 +49,7 @@ function render() {
 }
 render()
 
-data.observe((oldVal, newVal, event) => {
+data.observe((event, oldVal, newVal) => {
   render()
 })
 ```
@@ -59,7 +59,7 @@ Now, the state is always in sync with the DOM:
 data.get('value').deref()
 // => "ahoy"
 
-data.get('value').val('hola', new ChangeReason())
+data.get('value').val('hola')
 // => Input gets rerendered as <input value="hola" />
 
 // <= user types "hey" into input field

@@ -16,7 +16,7 @@ export function isEqual(x: any, y: any): boolean {
     || (x instanceof BaseRef && y instanceof BaseRef && isEqual(x.deref(), y.deref()))
 }
 
-export class Component<Props, State = {}> extends React.Component<Props, State> {
+export class UpdateTracker<Props, State = {}> {
   protected __prevProps: {[k: string]: any} = {}
 
   shouldComponentUpdate(nextProps: Props, nextState: State, nextContext: any): boolean {
@@ -32,15 +32,27 @@ export class Component<Props, State = {}> extends React.Component<Props, State> 
     return false
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
+  componentDidUpdate(nextProps: Props, nextState: State, prevProps: Props, prevState: State) {
     let props: {[k: string]: any} = {}
-    for (let key in this.props) {
-      if (this.props.hasOwnProperty(key)) {
-        let value = (this.props as any)[key]
+    for (let key in nextProps) {
+      if (nextProps.hasOwnProperty(key)) {
+        let value = nextProps[key]
         props[key] = value instanceof BaseRef ? value.deref() : value
       }
     }
     this.__prevProps = props
+  }
+}
+
+export class Component<Props, State = {}> extends React.Component<Props, State> {
+  protected __updateTracker = new UpdateTracker()
+
+  shouldComponentUpdate(nextProps: Props, nextState: State, nextContext: any): boolean {
+    return this.__updateTracker.shouldComponentUpdate(nextProps, nextState, nextContext)
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    return this.__updateTracker.componentDidUpdate(this.props, this.state, prevProps, prevState)
   }
 }
 
